@@ -51,12 +51,12 @@ app.use(favorites);
 app.use(token);
 app.use(users);
 
-app.use((_req, res) => {
+app.use((req, res) => {
   res.sendStatus(404);
 });
 
 // eslint-disable-next-line max-params
-app.use((err, _req, res, _next) => {
+app.use((err, req, res, next) => {
   if (err.output && err.output.statusCode) {
     return res
       .status(err.output.statusCode)
