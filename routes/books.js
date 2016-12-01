@@ -13,8 +13,8 @@ router.use(bodyParser.json());
 router.get('/books', (req, res, next) => {
   knex('books')
     .orderBy('title')
-    .then((bookSnake) => {
-      let books = camelizeKeys(bookSnake);
+    .then((bookSnakeCase) => {
+      let books = camelizeKeys(bookSnakeCase);
       res.send(books);
     })
     .catch((err) => {
@@ -32,8 +32,8 @@ router.get('/books/:id', (req, res, next) => {
   knex('books')
     .where('id', index)
     .first()
-    .then((bookSnake) => {
-      let book = camelizeKeys(bookSnake);
+    .then((bookSnakeCase) => {
+      let book = camelizeKeys(bookSnakeCase);
 
       if (!book) {
         return next();
@@ -56,8 +56,8 @@ router.post('/books', (req, res, next) => {
         description: req.body.description,
         cover_url: req.body.coverUrl
       }, '*')
-    .then((bookSnake) => {
-      let book = camelizeKeys(bookSnake);
+    .then((bookSnakeCase) => {
+      let book = camelizeKeys(bookSnakeCase);
       res.send(book[0]);
     })
     .catch((err) => {
@@ -90,8 +90,8 @@ router.patch('/books/:id', (req, res, next) => {
         }, "*")
         .where('id', index)
     })
-    .then((bookSnake) => {
-      let book = camelizeKeys(bookSnake);
+    .then((bookSnakeCase) => {
+      let book = camelizeKeys(bookSnakeCase);
       res.send(book[0]);
     })
     .catch((err) => {
@@ -110,12 +110,12 @@ router.delete('/books/:id', (req, res, next) =>{
   knex('books')
     .where('id', index)
     .first()
-    .then((bookSnake) => {
-      if (!bookSnake) {
+    .then((bookSnakeCase) => {
+      if (!bookSnakeCase) {
         return next();
       }
 
-      bookCamel = camelizeKeys(bookSnake);
+      bookCamel = camelizeKeys(bookSnakeCase);
 
       return knex('books')
         .del()
