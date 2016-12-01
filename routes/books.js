@@ -1,11 +1,11 @@
 'use strict';
 
-var express = require('express');
+const express = require('express');
 // eslint-disable-next-line new-cap
-var router = express.Router();
-var knex = require('../knex');
-var bodyParser = require('body-parser');
-var { camelizeKeys, decamelizeKeys } = require('humps');
+const router = express.Router();
+const knex = require('../knex');
+const bodyParser = require('body-parser');
+const { camelizeKeys, decamelizeKeys } = require('humps');
 
 router.use(bodyParser.json());
 
@@ -14,7 +14,7 @@ router.get('/books', (req, res, next) => {
   knex('books')
     .orderBy('title')
     .then((bookSnake) => {
-      var books = camelizeKeys(bookSnake);
+      let books = camelizeKeys(bookSnake);
       res.send(books);
     })
     .catch((err) => {
@@ -23,7 +23,7 @@ router.get('/books', (req, res, next) => {
 });
 
 router.get('/books/:id', (req, res, next) => {
-  var index = parseInt(req.params.id);
+  let index = parseInt(req.params.id);
 
   if(isNaN(index)|| index<0){
     res.sendStatus(404);
@@ -33,7 +33,7 @@ router.get('/books/:id', (req, res, next) => {
     .where('id', index)
     .first()
     .then((bookSnake) => {
-      var book = camelizeKeys(bookSnake);
+      let book = camelizeKeys(bookSnake);
 
       if (!book) {
         return next();
@@ -57,7 +57,7 @@ router.post('/books', (req, res, next) => {
         cover_url: req.body.coverUrl
       }, '*')
     .then((bookSnake) => {
-      var book = camelizeKeys(bookSnake);
+      let book = camelizeKeys(bookSnake);
       res.send(book[0]);
     })
     .catch((err) => {
@@ -66,7 +66,7 @@ router.post('/books', (req, res, next) => {
 });
 
 router.patch('/books/:id', (req, res, next) => {
-  var index = parseInt(req.params.id);
+  let index = parseInt(req.params.id);
 
   if(isNaN(index) || index<0){
     res.sendStatus(404);
@@ -88,10 +88,10 @@ router.patch('/books/:id', (req, res, next) => {
           description: req.body.description,
           cover_url: req.body.coverUrl
         }, "*")
-        .where('id', indexga)
+        .where('id', index)
     })
     .then((bookSnake) => {
-      var book = camelizeKeys(bookSnake);
+      let book = camelizeKeys(bookSnake);
       res.send(book[0]);
     })
     .catch((err) => {
@@ -100,8 +100,8 @@ router.patch('/books/:id', (req, res, next) => {
 });
 
 router.delete('/books/:id', (req, res, next) =>{
-  var index = parseInt(req.params.id);
-  var bookCamel;
+  let index = parseInt(req.params.id);
+  let bookCamel;
 
   if(isNaN(index) || index<0){
     res.sendStatus(404);
