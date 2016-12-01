@@ -25,7 +25,7 @@ router.get('/books', (req, res, next) => {
 router.get('/books/:id', (req, res, next) => {
   var index = parseInt(req.params.id);
 
-  if(isNaN(index)){
+  if(isNaN(index)|| index<0){
     res.sendStatus(404);
   }
 
@@ -69,7 +69,7 @@ router.post('/books', (req, res, next) => {
 router.patch('/books/:id', (req, res, next) => {
   var index = parseInt(req.params.id);
 
-  if(isNaN(index)){
+  if(isNaN(index) || index<0){
     res.sendStatus(404);
   }
 
@@ -89,7 +89,7 @@ router.patch('/books/:id', (req, res, next) => {
           description: req.body.description,
           cover_url: req.body.coverUrl
         }, "*")
-        .where('id', index)
+        .where('id', indexga)
     })
     .then((bookSnake) => {
       var book = camelizeKeys(bookSnake);
@@ -127,7 +127,7 @@ router.delete('/books/:id', (req, res, next) =>{
   var index = parseInt(req.params.id);
   var bookCamel;
 
-  if(isNaN(index)){
+  if(isNaN(index) || index<0){
     res.sendStatus(404);
   }
 
