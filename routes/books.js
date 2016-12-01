@@ -23,8 +23,14 @@ router.get('/books', (req, res, next) => {
 });
 
 router.get('/books/:id', (req, res, next) => {
+  var index = parseInt(req.params.id);
+
+  if(isNaN(index)){
+    res.sendStatus(404);
+  }
+
   knex('books')
-    .where('id', req.params.id)
+    .where('id', index)
     .first()
     .then((bookSnake) => {
       var book = camelizeKeys(bookSnake);
@@ -61,8 +67,14 @@ router.post('/books', (req, res, next) => {
 
 
 router.patch('/books/:id', (req, res, next) => {
+  var index = parseInt(req.params.id);
+
+  if(isNaN(index)){
+    res.sendStatus(404);
+  }
+
   knex('books')
-    .where('id', req.params.id)
+    .where('id', index)
     .first()
     .then((book) => {
       if (!book) {
@@ -77,7 +89,7 @@ router.patch('/books/:id', (req, res, next) => {
           description: req.body.description,
           cover_url: req.body.coverUrl
         }, "*")
-        .where('id', req.params.id)
+        .where('id', index)
     })
     .then((bookSnake) => {
       var book = camelizeKeys(bookSnake);
@@ -112,8 +124,12 @@ router.patch('/books/:id', (req, res, next) => {
 // });
 
 router.delete('/books/:id', (req, res, next) =>{
-  var index = req.params.id;
+  var index = parseInt(req.params.id);
   var bookCamel;
+
+  if(isNaN(index)){
+    res.sendStatus(404);
+  }
 
   knex('books')
     .where('id', index)
