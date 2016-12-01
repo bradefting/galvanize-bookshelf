@@ -16,7 +16,6 @@ router.get('/books', (req, res, next) => {
     .then((bookSnake) => {
       var books = camelizeKeys(bookSnake);
       res.send(books);
-      res.sendStatus(200);
     })
     .catch((err) => {
       next(err);
@@ -24,7 +23,7 @@ router.get('/books', (req, res, next) => {
 });
 
 router.get('/books/:id', (req, res, next) => {
-    knex('books')
+  knex('books')
     .where('id', req.params.id)
     .first()
     .then((bookSnake) => {
@@ -34,28 +33,111 @@ router.get('/books/:id', (req, res, next) => {
         return next();
       }
       res.send(book);
-      res.sendStatus(200);
+
     })
     .catch((err) => {
       next(err);
     });
 });
 
-// router.post('/artists', (req, res, next) => {
-//   console.log(req.body.name);
-//   console.log(req.body.profile_url);
-//   knex('artists')
-//     .insert({
-//       name: req.body.name,
-//       profile_url: req.body.profile_url
-//       }, '*')
-//     .then((artists) => {
-//       res.send(artists[0]);
+router.post('/books', (req, res, next) => {
+  knex('books')
+    // .where('id', req.body.book_id)
+      .insert({
+        title: req.body.title,
+        author: req.body.author,
+        genre: req.body.genre,
+        description: req.body.description,
+        cover_url: req.body.coverUrl
+      }, '*')
+    .then((bookSnake) => {
+      var book = camelizeKeys(bookSnake);
+      res.send(book[0]);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+
+router.patch('/books/:id', (req, res, next) => {
+  knex('books')
+    .where('id', req.params.id)
+    .first()
+    .then((book) => {
+      if (!book) {
+        return next();
+      }
+
+      return knex('books')
+        .update({
+          title: req.body.title,
+          author: req.body.author,
+          genre: req.body.genre,
+          description: req.body.description,
+          cover_url: req.body.coverUrl
+        }, "*")
+        .where('id', req.params.id)
+    })
+    .then((bookSnake) => {
+      var book = camelizeKeys(bookSnake);
+      res.send(book[0]);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+// router.patch('/books/:id', (req, res, next) => {
+//
+//   knex('books')
+//     .where('id', req.params.id)
+//     .first()
+//     .update({
+//       title: req.body.title,
+//       author: req.body.author,
+//       genre: req.body.genre,
+//       description: req.body.description,
+//       cover_url: req.body.coverUrl
+//     }, "*")
+//
+//     .then((bookSnake) => {
+//       var book = camelizeKeys(bookSnake);
+//
+//       res.send(book[0]);
 //     })
 //     .catch((err) => {
 //       next(err);
 //     });
 // });
+
+router.delete('/books/:id', (req, res, next) =>{
+  var index = req.params.id;
+  var bookCamel;
+
+  knex('books')
+    .where('id', index)
+    .first()
+    .then((bookSnake) => {
+      if (!bookSnake) {
+        return next();
+      }
+
+      bookCamel = camelizeKeys(bookSnake);
+
+      return knex('books')
+        .del()
+        .where('id', index);
+    })
+    .then(() => {
+      delete bookCamel.id;
+      res.send(bookCamel);
+    })
+    .catch((err) => {
+      next(err);
+    });
+
+});
 
 //headers
 // router.set('Content-Type', 'text/plain');
