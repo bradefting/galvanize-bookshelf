@@ -65,7 +65,6 @@ router.post('/books', (req, res, next) => {
     });
 });
 
-
 router.patch('/books/:id', (req, res, next) => {
   var index = parseInt(req.params.id);
 
@@ -100,29 +99,6 @@ router.patch('/books/:id', (req, res, next) => {
     });
 });
 
-// router.patch('/books/:id', (req, res, next) => {
-//
-//   knex('books')
-//     .where('id', req.params.id)
-//     .first()
-//     .update({
-//       title: req.body.title,
-//       author: req.body.author,
-//       genre: req.body.genre,
-//       description: req.body.description,
-//       cover_url: req.body.coverUrl
-//     }, "*")
-//
-//     .then((bookSnake) => {
-//       var book = camelizeKeys(bookSnake);
-//
-//       res.send(book[0]);
-//     })
-//     .catch((err) => {
-//       next(err);
-//     });
-// });
-
 router.delete('/books/:id', (req, res, next) =>{
   var index = parseInt(req.params.id);
   var bookCamel;
@@ -154,8 +130,5 @@ router.delete('/books/:id', (req, res, next) =>{
     });
 
 });
-
-//headers
-// router.set('Content-Type', 'text/plain');
 
 module.exports = router;
